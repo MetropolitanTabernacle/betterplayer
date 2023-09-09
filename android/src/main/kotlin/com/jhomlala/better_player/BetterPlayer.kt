@@ -404,9 +404,16 @@ internal class BetterPlayer(
         }
         val mediaItem = mediaItemBuilder.build()
         var drmSessionManagerProvider: DrmSessionManagerProvider? = null
-        drmSessionManager?.let { drmSessionManager ->
+
+        // Check if drmSessionManager is not null before creating the provider
+        if (drmSessionManager != null) {
             drmSessionManagerProvider = DrmSessionManagerProvider { drmSessionManager }
+        } else {
+            // If drmSessionManager is null, you can create a default provider or handle it as needed.
+            // For example, you might want to create a DefaultDrmSessionManagerProvider here.
+            drmSessionManagerProvider = DefaultDrmSessionManagerProvider()
         }
+
         return when (type) {
             C.TYPE_SS -> SsMediaSource.Factory(
                 DefaultSsChunkSource.Factory(mediaDataSourceFactory),
