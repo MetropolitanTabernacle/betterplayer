@@ -407,7 +407,13 @@ internal class BetterPlayer(
 
         // Check if drmSessionManager is not null before creating the provider
         if (drmSessionManager != null) {
-            drmSessionManagerProvider = DrmSessionManagerProvider { drmSessionManager }
+            val drmSessionManagerProvider = DrmSessionManagerProvider { drmSessionManager as? DrmSessionManager }
+             if (castedDrmSessionManager != null) {
+                drmSessionManagerProvider = DrmSessionManagerProvider { castedDrmSessionManager }
+            } else {
+                // If the cast fails, use DefaultDrmSessionManagerProvider
+                drmSessionManagerProvider = DefaultDrmSessionManagerProvider()
+            }
         } else {
             // If drmSessionManager is null, you can create a default provider or handle it as needed.
             // For example, you might want to create a DefaultDrmSessionManagerProvider here.
